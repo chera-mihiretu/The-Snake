@@ -6,7 +6,7 @@ class Game {
 		
 public:
 	// this is what begins the game
-	Game(int height, int width, int paddind, std::string title);
+	Game(int height, int width, int paddind, int cellSize, std::string title);
 	void StartGame();
 
 private:
@@ -21,10 +21,13 @@ private:
 	const int height;
 	const int width;
 	const int padding;
+	const int cellSize;
 	const std::string title;
 
 public:
 	// kill the game
 	~Game() noexcept;
+
+
 
 };

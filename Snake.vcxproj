@@ -136,6 +136,7 @@
     <ClCompile Include="Drawer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SNAKE.CPP" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawer.h" />

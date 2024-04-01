@@ -30,6 +30,9 @@
     <ClCompile Include="Drawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SNAKE.CPP">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawer.h">
