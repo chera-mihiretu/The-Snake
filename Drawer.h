@@ -27,4 +27,6 @@ private:
 	// The snake
 
 	std::vector<Snake*> snake;
+	// time counter
+	float timer;
 };
