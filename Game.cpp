@@ -3,7 +3,7 @@
 Game::Game(int height, int width, int padding,std::string title):
 	height(height), width(width),title(title), padding(padding)
 {	
-	InitWindow(width, height, title.c_str());
+	InitWindow(width + padding, height + padding, title.c_str());
 	// we calculate the cell incase we might wanna change the size of the frame
 	int cellCalculation = height / 12;
 	draw = new Drawer(height, width, padding, cellCalculation);
