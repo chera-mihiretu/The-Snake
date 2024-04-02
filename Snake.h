@@ -1,7 +1,7 @@
 #pragma once
 class Snake {
 public:
-	Snake(int x, int y, int cellSize);
+	Snake(int x, int y, int cellSize,int  padding);
 	int getX() const;
 
 	int getY() const;
@@ -23,6 +23,7 @@ private:
 	int pos_x;
 	int pos_y;
 	int cellSize;
+	int padding;
 	
 
 };

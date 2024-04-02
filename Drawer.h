@@ -13,6 +13,7 @@ public:
 
 	// click and events are gonna be handeled here
 	void Control();
+	void DrawFood();
 private:
 	// called by the draw function
 	void DrawBoard();
@@ -29,4 +30,7 @@ private:
 	std::vector<Snake*> snake;
 	// time counter
 	float timer;
+	// float -> for food placememt
+
+	int food[2] = { GetRandomValue(0,20), GetRandomValue(0,12) };
 };

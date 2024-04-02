@@ -3,9 +3,9 @@
 Game::Game(int height, int width, int padding, int cellSize,std::string title):
 	height(height), width(width),title(title), padding(padding),cellSize(cellSize)
 {	
-	InitWindow(width + padding, height + padding, title.c_str());
+	InitWindow(width + padding * 2, height + padding * 2, title.c_str());
 	// we calculate the cell incase we might wanna change the size of the frame
-	draw = new Drawer(height, width, padding, cellSize);
+	draw = new Drawer(height + padding, width + padding, padding, cellSize);
 	StartGame();
 }
 

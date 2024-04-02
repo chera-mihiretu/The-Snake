@@ -1,7 +1,7 @@
 #include "Snake.h"
 
-Snake::Snake(int x, int y, int cellSize):
-	pos_x(x), pos_y(y), dir(0), cellSize(cellSize)
+Snake::Snake(int x, int y, int cellSize, int padding):
+	pos_x(x), pos_y(y+padding), dir(0), cellSize(cellSize), padding(padding)
 {
 }
 
