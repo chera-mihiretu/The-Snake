@@ -33,6 +33,7 @@ private:
 	const int width;
 	const int padding;
 	const int cellSize;
+	
 
 	// The snake
 
@@ -45,4 +46,5 @@ private:
 	std::set <std::pair<int, int>> all_spot;
 	// the control page
 	Control* control;
+	
 };

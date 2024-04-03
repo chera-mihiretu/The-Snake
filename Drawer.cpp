@@ -5,9 +5,11 @@
 Drawer::Drawer(int height, int width, int padding, int cellSize) :
 	height(height), width(width), padding(padding), cellSize(cellSize)
 {
-	// create the controll object
+	// create the controll object and other setups
 	control = new Control(&snake);
-
+	// keep the track click intervals
+	control->setClicked(true);
+	timer = 0;
 	// creating the first 3 cells of the snake
 	for (int i = 0; i < 3; i++) {
 		int value = 0;
@@ -17,7 +19,6 @@ Drawer::Drawer(int height, int width, int padding, int cellSize) :
 		
 		snake.insert(snake.begin(), new Snake(value, 12 / 2, cellSize, padding));
 	}
-	timer = 0;
 
 	// create all the free spaces as set for creating a food at a random place
 	for (int i = 0; i < 12; i++) {
@@ -25,6 +26,8 @@ Drawer::Drawer(int height, int width, int padding, int cellSize) :
 			all_spot.insert(std::make_pair(j , i ));
 		}
 	}
+
+	
 
 	generate_food_pos();
 }
@@ -37,8 +40,8 @@ void Drawer::Update()
 	/// this GetTime generate the time your app is running for but we use that as an advantage to 
 	// to make a timer
 	if (timer < GetTime()) {
-
-		timer = timer + 0.5f;
+		control->setClicked(true);
+		timer = timer + 0.2f;
 		int pre_dir = snake[0]->getDir();
 		int pre_pos[] = {0,0};
 		for (int i = 0; i < snake.size(); i++) {
