@@ -19,7 +19,7 @@ void Game::GameRunner()
 	while (!GameOver()) {
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
-		draw->Control();
+		draw->ControlCaller();
 		draw->Draw();
 		draw->Update();
 		EndDrawing();

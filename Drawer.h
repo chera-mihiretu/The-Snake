@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include "Control.h"
 #include "Snake.h"
 #include <vector>
 #include <set>
@@ -14,7 +15,7 @@ public:
 	void Draw();
 
 	// click and events are gonna be handeled here
-	void Control();
+	void ControlCaller();
 	void DrawFood();
 	// generate spots 
 	
@@ -42,5 +43,6 @@ private:
 
 	int food[2];
 	std::set <std::pair<int, int>> all_spot;
-	
+	// the control page
+	Control* control;
 };

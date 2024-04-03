@@ -1,12 +1,6 @@
 #include <string>
 namespace constant {
-	// used to track the direction of the snake
-	const enum DIR_VAL {
-		LEFT,
-		DOWN,
-		RIGHT,
-		UP
-	};
+
 
 	//used to rearrange the window size and stuffs including snake size
 	constexpr int horizontal_cell = 20;

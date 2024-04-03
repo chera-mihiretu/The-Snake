@@ -5,8 +5,11 @@
 Drawer::Drawer(int height, int width, int padding, int cellSize) :
 	height(height), width(width), padding(padding), cellSize(cellSize)
 {
+	// create the controll object
+	control = new Control(&snake);
+
 	// creating the first 3 cells of the snake
-	for (int i = 0; i < 15; i++) {
+	for (int i = 0; i < 3; i++) {
 		int value = 0;
 		if (i != 0) {
 			value = snake[0]->getX() + 1;
@@ -60,8 +63,7 @@ void Drawer::Draw()
 
 {
 	// drawing the boarders
-	Rectangle boundary = Rectangle{ static_cast<float>(padding /2), static_cast<float>(padding/2), static_cast<float>(width), static_cast<float>(height) };
-	DrawRectangleLinesEx(boundary, static_cast<float>(padding/2) , GRAY);
+	DrawBoard();
 
 	//drawing the snake
 
@@ -74,23 +76,12 @@ void Drawer::Draw()
 
 }
 
-void Drawer::Control()
+void Drawer::ControlCaller()
 {
 	// Handling the pressed key events arrange the change in the snake
 	// we only change the first cell dir so that the other follow
 
-	if (IsKeyPressed(KEY_DOWN)) {
-		snake[0]->setDir(1);
-	}
-	if (IsKeyPressed(KEY_UP)) {
-		snake[0]->setDir(3);
-	}
-	if (IsKeyPressed(KEY_LEFT)) {
-		snake[0]->setDir(2);
-	}
-	if (IsKeyPressed(KEY_RIGHT)) {
-		snake[0]->setDir(0);
-	}
+	control->listenClick();
 }
 
 void Drawer::DrawFood()
@@ -170,6 +161,8 @@ void Drawer::body_collision()
 
 void Drawer::DrawBoard()
 {
+	Rectangle boundary = Rectangle{ static_cast<float>(padding / 2), static_cast<float>(padding / 2), static_cast<float>(width), static_cast<float>(height) };
+	DrawRectangleLinesEx(boundary, static_cast<float>(padding / 2), GRAY);
 }
 
 void Drawer::DrawSnake(Snake* ss)
