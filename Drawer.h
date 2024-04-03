@@ -2,6 +2,8 @@
 #include "raylib.h"
 #include "Snake.h"
 #include <vector>
+#include <set>
+#include <algorithm>
 class Drawer {
 public: 
 	Drawer(int height, int width,int padding, int cellSize);
@@ -14,6 +16,12 @@ public:
 	// click and events are gonna be handeled here
 	void Control();
 	void DrawFood();
+	// generate spots 
+	
+	void generate_food_pos();
+	// game status
+	void found_food(int pre_pos[], int pre_dir);
+	void body_collision();
 private:
 	// called by the draw function
 	void DrawBoard();
@@ -32,5 +40,7 @@ private:
 	float timer;
 	// float -> for food placememt
 
-	int food[2] = { GetRandomValue(0,20), GetRandomValue(0,12) };
+	int food[2];
+	std::set <std::pair<int, int>> all_spot;
+	
 };

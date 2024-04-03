@@ -5,15 +5,25 @@
 Drawer::Drawer(int height, int width, int padding, int cellSize) :
 	height(height), width(width), padding(padding), cellSize(cellSize)
 {
-	for (int i = 0; i < 3; i++) {
-		int value = padding;
+	// creating the first 3 cells of the snake
+	for (int i = 0; i < 15; i++) {
+		int value = 0;
 		if (i != 0) {
-			value = snake[0]->getX() + cellSize;
+			value = snake[0]->getX() + 1;
 		}
 		
-		snake.insert(snake.begin(), new Snake(value, cellSize * 12 / 2, cellSize, padding));
+		snake.insert(snake.begin(), new Snake(value, 12 / 2, cellSize, padding));
 	}
 	timer = 0;
+
+	// create all the free spaces as set for creating a food at a random place
+	for (int i = 0; i < 12; i++) {
+		for(int j = 0; j <20; j++) {
+			all_spot.insert(std::make_pair(j , i ));
+		}
+	}
+
+	generate_food_pos();
 }
 
 void Drawer::Update()
@@ -21,26 +31,30 @@ void Drawer::Update()
 	// moving the snake
 
 	
-
+	/// this GetTime generate the time your app is running for but we use that as an advantage to 
+	// to make a timer
 	if (timer < GetTime()) {
+
 		timer = timer + 0.5f;
 		int pre_dir = snake[0]->getDir();
-		
+		int pre_pos[] = {0,0};
 		for (int i = 0; i < snake.size(); i++) {
 			int cur_dir = snake[i]->getDir();
 			// we are taking the direction from the previous cell and assigning to te current 
 			// in that way we can have the L shaped snake other wise it will be line moving
-			
+			pre_pos[0] = snake[i]->getX();
+			pre_pos[1] = snake[i]->getY();
 			snake[i]->move(snake[i]->getDir());
 			snake[i]->setDir(pre_dir);
 			pre_dir = cur_dir;
 		}	 
-		std::cout << "hellow" << std::endl;
-
-
+		
+		found_food(pre_pos, pre_dir);
+		body_collision();
 	}
 	
-}
+	
+} 
 
 void Drawer::Draw()
 
@@ -64,6 +78,7 @@ void Drawer::Control()
 {
 	// Handling the pressed key events arrange the change in the snake
 	// we only change the first cell dir so that the other follow
+
 	if (IsKeyPressed(KEY_DOWN)) {
 		snake[0]->setDir(1);
 	}
@@ -80,8 +95,77 @@ void Drawer::Control()
 
 void Drawer::DrawFood()
 {
-	// Here we Draw food by generating some number 
+	
+	assert(food[0] >= 0 and food[0]* cellSize + padding <= width);
+	assert(food[1] >= 0 and food[1]*cellSize+padding <= height);
 	DrawRectangle(food[0] * cellSize + padding, food[1] * cellSize + padding, cellSize, cellSize, BLUE);
+
+}
+
+void Drawer::generate_food_pos()
+{
+	/*
+	// Here we Draw food by generating some number this has to improved
+	// we cannot do that because at the end we may infinite loop if we try to generate random
+	// number because the generated number may have snake bosy overit
+	// let say if every place is covered by body of the snake except one cell and we generate numbers until they are not 
+	// where there is no snake body 
+	// 
+	// in that case the possiblity will 1/ 12 * 20 because we have that musch grid
+	// 
+	*/
+	// so we use set to generate all spot the the snake position and then we can get the XOR of that
+	std::set <std::pair<int, int>> snake_spot;
+	for (int i = 0; i < snake.size(); i++) {
+		snake_spot.insert(std::make_pair(snake[i]->getX(), snake[i]->getY()));
+	}
+
+	//this is to use the set to find free space
+	
+	std::set<std::pair<int, int>> result;
+
+	for (const auto& element : all_spot) {
+		if (snake_spot.find(element) == snake_spot.end()) {
+			result.insert(element);
+		}
+	}
+
+	
+	
+	//If There is free space availabe it will put the food over there randomly if not pauses
+	if (result.size() == 0) {
+		system("pause");
+	}
+	else {
+		int index = GetRandomValue(0, result.size() - 1);
+		auto pos = result.begin();
+		std::advance(pos, index);
+		std::pair<int, int> pairs = *pos;
+
+		food[0] = pairs.first;
+		food[1] = pairs.second;
+	}
+
+
+	
+
+} 
+
+void Drawer::found_food(int pre_pos[], int pre_dir)
+{
+
+	if (snake[0]->getX() == food[0] and snake[0]->getY() == food[1]) {
+		snake.push_back(new Snake(pre_pos[0], pre_pos[1], cellSize, padding));
+		snake[snake.size() - 1]->setDir(pre_dir);
+		generate_food_pos();
+	}
+}
+
+void Drawer::body_collision()
+{
+	
+
+
 }
 
 void Drawer::DrawBoard()
@@ -91,12 +175,13 @@ void Drawer::DrawBoard()
 void Drawer::DrawSnake(Snake* ss)
 {
 	//assertion to make sure no drawing out side the window
-	assert(ss->getX() >= 0 and ss->getX() <= width); // drawing outside window
-	assert(ss->getY() >= 0 and ss->getY() <= height); // drawing outside window
+	//std::cout << "X :" << ss->getDrawingX() << " Y : " << ss->getDrawingY() << std::endl;
+	assert(ss->getDrawingX() >= 0 and ss->getDrawingX()<= width-cellSize); // drawing outside window
+	assert(ss->getDrawingY() >= 0 and ss->getDrawingY() <= height-cellSize); // drawing outside window
 
 
 	// Draw the snake as rounded ball
 
-	Rectangle cell = { static_cast<float>(ss->getX()), static_cast<float>(ss->getY()), static_cast<float>(cellSize), static_cast<float>(cellSize) };
+	Rectangle cell = { static_cast<float>(ss->getDrawingX()), static_cast<float>(ss->getDrawingY()), static_cast<float>(cellSize), static_cast<float>(cellSize) };
 	DrawRectangleRounded(cell,100, 100, BROWN);
 }

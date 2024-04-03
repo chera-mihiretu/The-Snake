@@ -10,6 +10,9 @@ public:
 	void setY(int y);
 	void setDir(int pos);
 	int getDir()const;
+	// for drawing
+	int getDrawingX() const;
+	int getDrawingY() const;
 	// moving the snake
 	int move(int dir);
 
