@@ -1,9 +1,10 @@
 #include "Game.h"
 
-Game::Game(int height, int width, int padding, int cellSize,std::string title):
-	height(height), width(width),title(title), padding(padding),cellSize(cellSize)
+Game::Game(int height, int width, int padding, int cellSize,std::string title, int menu):
+	height(height), width(width),title(title), padding(padding),cellSize(cellSize), menu(menu)
 {	
-	InitWindow(width + padding * 2, height + padding * 2, title.c_str());
+	
+	InitWindow(width  +  padding * 2 + menu, height  + padding * 2, title.c_str());
 	// we calculate the cell incase we might wanna change the size of the frame
 	draw = new Drawer(height + padding, width + padding, padding, cellSize);
 	StartGame();
@@ -15,14 +16,23 @@ void Game::StartGame()
 }
 
 void Game::GameRunner()
-{
+{	
+
 	while (!GameOver()) {
-		BeginDrawing();
-		ClearBackground(RAYWHITE);
-		draw->ControlCaller();
-		draw->Draw();
-		draw->Update();
-		EndDrawing();
+		if (!draw->getGameOver()) {
+			BeginDrawing();
+			ClearBackground(RAYWHITE);
+			if (draw->getOnPlaing()) {
+				draw->ControlCaller();
+				draw->Draw();
+				draw->Update();
+			}
+			else {
+				std::cout << "hellow" << std::endl;
+				draw->DrawSetting(width + padding, height, menu);
+			}
+			EndDrawing();
+		}
 	}
 }
 

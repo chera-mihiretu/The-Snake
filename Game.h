@@ -1,13 +1,12 @@
 #pragma once
+#ifndef GAME_H
+#define GAME_H
+
+
 #include "raylib.h"
 #include <string>
 #include "Drawer.h"
 class Game {
-		
-public:
-	// this is what begins the game
-	Game(int height, int width, int paddind, int cellSize, std::string title);
-	void StartGame();
 
 private:
 	// have ifno about the condition of the game
@@ -22,12 +21,17 @@ private:
 	const int width;
 	const int padding;
 	const int cellSize;
+	const int menu;
 	const std::string title;
 
 public:
 	// kill the game
 	~Game() noexcept;
+public:
+	// this is what begins the game
+	Game(int height, int width, int paddind, int cellSize, std::string title, int menu);
+	void StartGame();
 
 
-
-};
+}; 
+#endif // !GAME_H

@@ -4,7 +4,7 @@
 namespace cn = constant;
 int main() {
 	// This is where every thing begins
-	Game* game = new Game(cn::height, cn::width, cn::padding, cn::cellSize, cn::title);
+	Game* game = new Game(cn::height, cn::width, cn::padding, cn::cellSize, cn::title, cn::menu);
 
 	
 }

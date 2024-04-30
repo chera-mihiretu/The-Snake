@@ -142,6 +142,7 @@
     <ClInclude Include="Control.h" />
     <ClInclude Include="Drawer.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Snake.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

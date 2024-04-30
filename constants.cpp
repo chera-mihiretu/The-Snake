@@ -6,6 +6,7 @@ namespace constant {
 	constexpr int horizontal_cell = 20;
 	constexpr int verticla_cell = 12;
 	constexpr int cellSize = 40;
+	constexpr int menu = 300;
 
 	// 
 	constexpr int height = verticla_cell * cellSize;

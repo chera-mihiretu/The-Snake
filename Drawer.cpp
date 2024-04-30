@@ -105,7 +105,7 @@ void Drawer::generate_food_pos()
 	// let say if every place is covered by body of the snake except one cell and we generate numbers until they are not 
 	// where there is no snake body 
 	// 
-	// in that case the possiblity will 1/ 12 * 20 because we have that musch grid
+	// in that ca se the possiblity will 1/ 12 * 20 because we have that musch grid
 	// 
 	*/
 	// so we use set to generate all spot the the snake position and then we can get the XOR of that
@@ -157,10 +157,44 @@ void Drawer::found_food(int pre_pos[], int pre_dir)
 
 void Drawer::body_collision()
 {
-	
+	for (int i = 1; i < snake.size(); i++) {
+		if (snake[0]->getX() == snake[i]->getX() && snake[0]->getY() == snake[i]->getY()) {
+			std::cout << "Game Over" << std::endl;
+		}
+	}
+
 
 
 }
+
+bool Drawer::getOnPlaing() const
+{
+	return onPlaing;
+}
+
+bool Drawer::getGameOver() const
+{
+	return gameOver;
+}
+
+// here we will draw the setting 
+void Drawer::DrawSetting(int offset, int height, int width)
+{
+
+	DrawText("Snake Game", width/ 2 + offset - MeasureText("Snake Game", 30)/2, height / 6, 30, RED);
+	DrawRectangleLinesEx({ static_cast<float>(offset + width / 4), static_cast<float>(height / 4), static_cast<float>(width/2), 50}, 3, BLUE);
+	DrawText("Play", width / 2 + offset - MeasureText("Play", 30) / 2, height / 4 + text_pad, 30, BLUE);
+
+	DrawRectangleLinesEx({ static_cast<float>(offset + width / 4), static_cast<float>(height / 2), static_cast<float>(width / 2), 50 }, 3, BLUE);
+	DrawText("Pause", width / 2 + offset - MeasureText("Pause", 30) / 2, height / 2 + text_pad, 30, BLUE);
+	DrawBoard();
+	
+}
+
+
+
+
+
 
 void Drawer::DrawBoard()
 {
