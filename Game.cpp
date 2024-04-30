@@ -19,20 +19,21 @@ void Game::GameRunner()
 {	
 
 	while (!GameOver()) {
-		if (!draw->getGameOver()) {
-			BeginDrawing();
-			ClearBackground(RAYWHITE);
-			if (draw->getOnPlaing()) {
-				draw->ControlCaller();
-				draw->Draw();
-				draw->Update();
-			}
-			else {
-				std::cout << "hellow" << std::endl;
-				draw->DrawSetting(width + padding, height, menu);
-			}
-			EndDrawing();
-		}
+
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+			
+		draw->ControlCaller();
+		draw->Draw();
+		draw->Update();
+			
+		//std::cout << "hellow" << std::endl;
+		draw->DrawSetting(width + padding, height, menu);
+
+		// drawing the boarders
+		draw->DrawBoard();
+		EndDrawing();
+
 	}
 }
 

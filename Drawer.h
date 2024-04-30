@@ -9,7 +9,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
-
+#include "Click.h"
 class Drawer {
 public: 
 	Drawer(int height, int width,int padding, int cellSize);
@@ -33,12 +33,15 @@ public:
 	bool getGameOver() const;
 	// Draw Settings
 	void DrawSetting(int offset, int height, int width);
-
-private:
 	// called by the draw function
 	void DrawBoard();
-	void DrawSnake(Snake* snake);
 
+private:
+	void DrawSnake(Snake* snake);
+	// start every thing as new
+
+
+	void StartNew();
 	// board infos
 	const int height;
 	const int width;
@@ -65,7 +68,12 @@ private:
 	std::set <std::pair<int, int>> all_spot;
 	// the control page
 	Control* control;
-	
+
+	// click handler class
+	Click* click;
+	// play button text, and game info
+	std::string play = "Play";
+	int score = 0;
 };
 
 #endif // !DRAWER_H

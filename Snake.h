@@ -1,4 +1,5 @@
 #pragma once
+#include <raylib.h>
 class Snake {
 public:
 	Snake(int x, int y, int cellSize,int  padding);
@@ -15,7 +16,9 @@ public:
 	int getDrawingY() const;
 	// moving the snake
 	int move(int dir);
-
+	// set snake color
+	void setColor(Color c);;
+	Color getColor()const;
 
 private:
 	// 0 -> represent left
@@ -27,6 +30,8 @@ private:
 	int pos_y;
 	int cellSize;
 	int padding;
+	// color
+	Color color = LIGHTGRAY;
 	
 
 };

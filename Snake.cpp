@@ -67,3 +67,13 @@ int Snake::move(int dir)
 	}
 	return -1;
 }
+
+void Snake::setColor(Color c)
+{
+	this->color = c;
+}
+
+Color Snake::getColor() const
+{
+	return color;
+}

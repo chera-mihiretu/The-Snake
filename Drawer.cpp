@@ -1,33 +1,25 @@
 #include "Drawer.h"
 #include <iostream>
 #include <assert.h>
-
+#include <sstream>
 Drawer::Drawer(int height, int width, int padding, int cellSize) :
 	height(height), width(width), padding(padding), cellSize(cellSize)
 {
+	// the click
+	click = new Click();
 	// create the controll object and other setups
 	control = new Control(&snake);
 	// keep the track click intervals
 	control->setClicked(true);
 	timer = 0;
-	// creating the first 3 cells of the snake
-	for (int i = 0; i < 3; i++) {
-		int value = 0;
-		if (i != 0) {
-			value = snake[0]->getX() + 1;
-		}
-		
-		snake.insert(snake.begin(), new Snake(value, 12 / 2, cellSize, padding));
-	}
-
+	
 	// create all the free spaces as set for creating a food at a random place
 	for (int i = 0; i < 12; i++) {
-		for(int j = 0; j <20; j++) {
-			all_spot.insert(std::make_pair(j , i ));
+		for (int j = 0; j < 20; j++) {
+			all_spot.insert(std::make_pair(j, i));
 		}
 	}
-
-	
+	StartNew();
 
 	generate_food_pos();
 }
@@ -39,24 +31,27 @@ void Drawer::Update()
 	
 	/// this GetTime generate the time your app is running for but we use that as an advantage to 
 	// to make a timer
-	if (timer < GetTime()) {
-		control->setClicked(true);
-		timer = timer + 0.2f;
-		int pre_dir = snake[0]->getDir();
-		int pre_pos[] = {0,0};
-		for (int i = 0; i < snake.size(); i++) {
-			int cur_dir = snake[i]->getDir();
-			// we are taking the direction from the previous cell and assigning to te current 
-			// in that way we can have the L shaped snake other wise it will be line moving
-			pre_pos[0] = snake[i]->getX();
-			pre_pos[1] = snake[i]->getY();
-			snake[i]->move(snake[i]->getDir());
-			snake[i]->setDir(pre_dir);
-			pre_dir = cur_dir;
-		}	 
-		
-		found_food(pre_pos, pre_dir);
-		body_collision();
+	if (gameOver) return;
+	if (onPlaing) {
+		if (timer < GetTime()) {
+			control->setClicked(true);
+			timer = GetTime() + 0.2f;
+			int pre_dir = snake[0]->getDir();
+			int pre_pos[] = { 0,0 };
+			for (int i = 0; i < snake.size(); i++) {
+				int cur_dir = snake[i]->getDir();
+				// we are taking the direction from the previous cell and assigning to te current 
+				// in that way we can have the L shaped snake other wise it will be line moving
+				pre_pos[0] = snake[i]->getX();
+				pre_pos[1] = snake[i]->getY();
+				snake[i]->move(snake[i]->getDir());
+				snake[i]->setDir(pre_dir);
+				pre_dir = cur_dir;
+			}
+
+			found_food(pre_pos, pre_dir);
+			body_collision();
+		}
 	}
 	
 	
@@ -65,8 +60,7 @@ void Drawer::Update()
 void Drawer::Draw()
 
 {
-	// drawing the boarders
-	DrawBoard();
+
 
 	//drawing the snake
 
@@ -128,7 +122,9 @@ void Drawer::generate_food_pos()
 	
 	//If There is free space availabe it will put the food over there randomly if not pauses
 	if (result.size() == 0) {
-		system("pause");
+		onPlaing = false;
+		gameOver = true;
+		play = "Done";
 	}
 	else {
 		int index = GetRandomValue(0, result.size() - 1);
@@ -151,7 +147,9 @@ void Drawer::found_food(int pre_pos[], int pre_dir)
 	if (snake[0]->getX() == food[0] and snake[0]->getY() == food[1]) {
 		snake.push_back(new Snake(pre_pos[0], pre_pos[1], cellSize, padding));
 		snake[snake.size() - 1]->setDir(pre_dir);
+		score += 1;
 		generate_food_pos();
+
 	}
 }
 
@@ -159,7 +157,10 @@ void Drawer::body_collision()
 {
 	for (int i = 1; i < snake.size(); i++) {
 		if (snake[0]->getX() == snake[i]->getX() && snake[0]->getY() == snake[i]->getY()) {
-			std::cout << "Game Over" << std::endl;
+			gameOver = true;
+			snake[0]->setColor(RED);
+			snake[i]->setColor(RED);
+			play = "Over";
 		}
 	}
 
@@ -182,12 +183,44 @@ void Drawer::DrawSetting(int offset, int height, int width)
 {
 
 	DrawText("Snake Game", width/ 2 + offset - MeasureText("Snake Game", 30)/2, height / 6, 30, RED);
-	DrawRectangleLinesEx({ static_cast<float>(offset + width / 4), static_cast<float>(height / 4), static_cast<float>(width/2), 50}, 3, BLUE);
-	DrawText("Play", width / 2 + offset - MeasureText("Play", 30) / 2, height / 4 + text_pad, 30, BLUE);
+	DrawRectangleLinesEx({ static_cast<float>(offset + width / 4), static_cast<float>(height / 3), static_cast<float>(width/2), 50}, 3, BLUE);
+	DrawText(play.c_str(), width / 2 + offset - MeasureText(play.c_str(), 30) / 2, height / 3 + text_pad, 30, BLUE);
 
-	DrawRectangleLinesEx({ static_cast<float>(offset + width / 4), static_cast<float>(height / 2), static_cast<float>(width / 2), 50 }, 3, BLUE);
-	DrawText("Pause", width / 2 + offset - MeasureText("Pause", 30) / 2, height / 2 + text_pad, 30, BLUE);
-	DrawBoard();
+
+	
+	std::stringstream convertor;
+
+	std::string myString = "0";
+
+
+	convertor << score;
+	convertor >> myString;
+	myString = "Score : " + myString;
+	DrawText(myString.c_str(), width / 2 + offset - MeasureText(myString.c_str(), 30) / 2, height / 2 + text_pad, 30, BLUE);
+
+
+
+
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+		if (click->clicked(offset + width / 4, height / 3, offset + width / 4 + width / 2, height / 3 + 50))
+		{
+			
+			if (!gameOver) {
+				if (play == "Play") play = "Pause";
+				else play = "Play";
+				onPlaing = !onPlaing;
+			}
+			else {
+				play = "Pause";
+				score = 0;
+				StartNew();
+				gameOver = false;
+				onPlaing = true;
+			}
+			
+		}
+	}
+	
 	
 }
 
@@ -204,14 +237,26 @@ void Drawer::DrawBoard()
 
 void Drawer::DrawSnake(Snake* ss)
 {
-	//assertion to make sure no drawing out side the window
-	//std::cout << "X :" << ss->getDrawingX() << " Y : " << ss->getDrawingY() << std::endl;
-	assert(ss->getDrawingX() >= 0 and ss->getDrawingX()<= width-cellSize); // drawing outside window
-	assert(ss->getDrawingY() >= 0 and ss->getDrawingY() <= height-cellSize); // drawing outside window
-
-
+	
 	// Draw the snake as rounded ball
 
 	Rectangle cell = { static_cast<float>(ss->getDrawingX()), static_cast<float>(ss->getDrawingY()), static_cast<float>(cellSize), static_cast<float>(cellSize) };
-	DrawRectangleRounded(cell,100, 100, BROWN);
+	DrawRectangleRounded(cell,100, 100, ss->getColor());
+}
+
+void Drawer::StartNew()
+{
+	while (snake.size() > 0) snake.pop_back();
+	// creating the first 3 cells of the snake
+	for (int i = 0; i < 3; i++) {
+		int value = 0;
+		if (i != 0) {
+			value = snake[0]->getX() + 1;
+		}
+
+		snake.insert(snake.begin(), new Snake(value, 12 / 2, cellSize, padding));
+	}
+	snake[0]->setColor(GREEN);
+
+	
 }
