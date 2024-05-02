@@ -10,6 +10,7 @@
 #include <set>
 #include <algorithm>
 #include "Click.h"
+#include <array>
 class Drawer {
 public: 
 	Drawer(int height, int width,int padding, int cellSize);
@@ -27,7 +28,7 @@ public:
 	void generate_food_pos();
 	// game status
 	void found_food(int pre_pos[], int pre_dir);
-	void body_collision();
+	bool body_collision(std::array<int, 2> result);
 	// game status
 	bool getOnPlaing() const;
 	bool getGameOver() const;
@@ -35,6 +36,9 @@ public:
 	void DrawSetting(int offset, int height, int width);
 	// called by the draw function
 	void DrawBoard();
+	// game status
+
+	bool checkStatus(std::array<int, 2> result);
 
 private:
 	void DrawSnake(Snake* snake);

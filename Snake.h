@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include <array>
 class Snake {
 public:
 	Snake(int x, int y, int cellSize,int  padding);
@@ -19,6 +20,8 @@ public:
 	// set snake color
 	void setColor(Color c);;
 	Color getColor()const;
+	// return whenever the game is over
+	std::array<int, 2> checkBefore(int dir);
 
 private:
 	// 0 -> represent left
@@ -32,6 +35,8 @@ private:
 	int padding;
 	// color
 	Color color = LIGHTGRAY;
+	// status controller
+	std::array<int, 2> result;
 	
 
 };

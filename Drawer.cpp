@@ -44,13 +44,19 @@ void Drawer::Update()
 				// in that way we can have the L shaped snake other wise it will be line moving
 				pre_pos[0] = snake[i]->getX();
 				pre_pos[1] = snake[i]->getY();
+				if (i == 0) {
+					std::array<int, 2> result = snake[i]->checkBefore(snake[i]->getDir());
+					if (checkStatus(result)) {
+						break;
+					}
+				}
 				snake[i]->move(snake[i]->getDir());
 				snake[i]->setDir(pre_dir);
 				pre_dir = cur_dir;
 			}
 
 			found_food(pre_pos, pre_dir);
-			body_collision();
+			
 		}
 	}
 	
@@ -153,16 +159,17 @@ void Drawer::found_food(int pre_pos[], int pre_dir)
 	}
 }
 
-void Drawer::body_collision()
+bool Drawer::body_collision(std::array<int, 2> result)
 {
-	for (int i = 1; i < snake.size(); i++) {
-		if (snake[0]->getX() == snake[i]->getX() && snake[0]->getY() == snake[i]->getY()) {
-			gameOver = true;
-			snake[0]->setColor(RED);
-			snake[i]->setColor(RED);
-			play = "Over";
+	std::cout << result[1] << std::endl;
+	
+	for (int i = 1; i < snake.size() - 1; i++) {
+		if (result[0] == snake[i]->getX() && result[1] == snake[i]->getY()) {
+			
+			return true;
 		}
 	}
+	return false;
 
 
 
@@ -233,6 +240,22 @@ void Drawer::DrawBoard()
 {
 	Rectangle boundary = Rectangle{ static_cast<float>(padding / 2), static_cast<float>(padding / 2), static_cast<float>(width), static_cast<float>(height) };
 	DrawRectangleLinesEx(boundary, static_cast<float>(padding / 2), GRAY);
+}
+
+bool Drawer::checkStatus(std::array<int, 2> result)
+{
+
+	//std::cout << result[0] << "  " << result[1] << std::endl;
+	//std::cout << (bool)body_collision(result) << std::endl;
+	if (body_collision(result)) {
+		//std::cout << result[0] << "  " << result[1] << std::endl;
+		gameOver = true;
+
+		snake[0]->setColor(RED);
+		play = "Over";
+		return true;
+	}
+	return false;
 }
 
 void Drawer::DrawSnake(Snake* ss)
