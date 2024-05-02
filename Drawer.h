@@ -28,7 +28,10 @@ public:
 	void generate_food_pos();
 	// game status
 	void found_food(int pre_pos[], int pre_dir);
+	//check if the snake collided with it self
 	bool body_collision(std::array<int, 2> result);
+	// check if the snake is collided with wall in that case game over
+	bool wall_collision(std::array<int, 2> result);
 	// game status
 	bool getOnPlaing() const;
 	bool getGameOver() const;

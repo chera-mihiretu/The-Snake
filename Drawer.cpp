@@ -175,6 +175,17 @@ bool Drawer::body_collision(std::array<int, 2> result)
 
 }
 
+bool Drawer::wall_collision(std::array<int, 2> result)
+{
+	if (!(result[0] >= 0 && result[0] * cellSize <= width - cellSize)) {
+		return true;
+	}// drawing outside window
+	if (!(result[1] >= 0 && result[1] * cellSize <= height - cellSize)) {
+		return true;
+	}
+	return false;
+}
+
 bool Drawer::getOnPlaing() const
 {
 	return onPlaing;
@@ -247,7 +258,7 @@ bool Drawer::checkStatus(std::array<int, 2> result)
 
 	//std::cout << result[0] << "  " << result[1] << std::endl;
 	//std::cout << (bool)body_collision(result) << std::endl;
-	if (body_collision(result)) {
+	if (body_collision(result) || wall_collision(result)) {
 		//std::cout << result[0] << "  " << result[1] << std::endl;
 		gameOver = true;
 
